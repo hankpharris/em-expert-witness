@@ -3,6 +3,18 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Image from 'next/image';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useState } from 'react';
+
+const contactFormSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -11,16 +23,78 @@ export default function Home() {
     offset: ["start start", "end end"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.8]);
+  // Hero section transforms
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0.8]);
   const imageScale = useTransform(scrollYProgress, [0, 0.5], [1.1, 1]);
   const borderScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.5]);
+
+  // About section transforms
+  const aboutScale = useTransform(scrollYProgress, [0.2, 0.35, 0.5, 0.65], [0.8, 1, 1, 0.8]);
+  const aboutOpacity = useTransform(scrollYProgress, [0.2, 0.35, 0.5, 0.65], [0.5, 1, 1, 0.5]);
+
+  // Expertise section transforms
+  const expertiseScale = useTransform(scrollYProgress, [0.5, 0.65, 0.8, 0.95], [0.8, 1, 1, 0.8]);
+  const expertiseOpacity = useTransform(scrollYProgress, [0.5, 0.65, 0.8, 0.95], [0.5, 1, 1, 0.5]);
+
+  // Contact section transforms
+  const contactScale = useTransform(scrollYProgress, [0.8, 0.85, 1], [0.8, 1, 1]);
+  const contactOpacity = useTransform(scrollYProgress, [0.8, 0.85, 1], [0.5, 1, 1]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Something went wrong');
+      }
+
+      setSubmitStatus({
+        type: 'success',
+        message: 'Thank you for your message. We will get back to you soon.',
+      });
+      reset();
+    } catch (error) {
+      setSubmitStatus({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Something went wrong',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main ref={containerRef} className="relative">
       {/* Hero Section */}
       <motion.section 
-        style={{ opacity, scale }}
+        style={{ opacity: heroOpacity, scale: heroScale }}
         className="section bg-gradient-to-b from-[var(--color-5)] to-[var(--color-4)]"
       >
         <div className="container">
@@ -71,11 +145,8 @@ export default function Home() {
 
       {/* About Section */}
       <motion.section 
+        style={{ scale: aboutScale, opacity: aboutOpacity }}
         className="section bg-white"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
       >
         <div className="container">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -105,11 +176,8 @@ export default function Home() {
 
       {/* Fields of Expertise Section */}
       <motion.section 
+        style={{ scale: expertiseScale, opacity: expertiseOpacity }}
         className="section bg-[var(--color-5)]/20"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
       >
         <div className="container">
           <h2 className="text-4xl font-bold mb-12 text-center">Fields of Expertise</h2>
@@ -139,25 +207,83 @@ export default function Home() {
 
       {/* Contact Section */}
       <motion.section 
+        style={{ scale: contactScale, opacity: contactOpacity }}
         className="section bg-white"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
       >
         <div className="container">
           <h2 className="text-4xl font-bold mb-12 text-center">Contact</h2>
           <div className="max-w-2xl mx-auto">
-            <p className="text-center mb-8">
-              [Placeholder text for contact information]
-            </p>
-            <motion.button
-              className="bg-[var(--color-4)] text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-[var(--color-4)]/90 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Get in Touch
-            </motion.button>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  Name
+                </label>
+                <input
+                  {...register('name')}
+                  type="text"
+                  id="name"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
+                  placeholder="Your name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email
+                </label>
+                <input
+                  {...register('email')}
+                  type="email"
+                  id="email"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
+                  placeholder="your.email@example.com"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  Message
+                </label>
+                <textarea
+                  {...register('message')}
+                  id="message"
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
+                  placeholder="Your message"
+                />
+                {errors.message && (
+                  <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
+                )}
+              </div>
+
+              {submitStatus.type && (
+                <div
+                  className={`p-4 rounded-lg ${
+                    submitStatus.type === 'success'
+                      ? 'bg-green-50 text-green-800'
+                      : 'bg-red-50 text-red-800'
+                  }`}
+                >
+                  {submitStatus.message}
+                </div>
+              )}
+
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[var(--color-4)] text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-[var(--color-4)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isSubmitting ? 'Sending...' : 'Send Message'}
+              </motion.button>
+            </form>
           </div>
         </div>
       </motion.section>
