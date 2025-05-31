@@ -146,9 +146,9 @@ export default function Home() {
       {/* About Section */}
       <motion.section 
         style={{ scale: aboutScale, opacity: aboutOpacity }}
-        className="section bg-white"
+        className="section bg-white py-16"
       >
-        <div className="container">
+        <div className="container max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative h-[400px]">
               <Image
