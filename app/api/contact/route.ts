@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const { data, error } = await resend.emails.send({
       from: 'Contact Form <contact@yourdomain.com>',
       to: process.env.CONTACT_EMAIL!, // Your email address
-      reply_to: validatedData.email,
+      replyTo: validatedData.email,
       subject: `New Contact Form Submission from ${validatedData.name}`,
       text: `
 Name: ${validatedData.name}
