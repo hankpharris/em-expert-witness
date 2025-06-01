@@ -187,9 +187,22 @@ export default function Home() {
         <div className="container">
           <h2 className="text-4xl font-bold mb-12 text-center">Fields of Expertise</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
+            {[
+              {
+                title: "Obstetrics",
+                description: "Thorough experience and expertise in both in and outpatient care"
+              },
+              {
+                title: "Expertise 2",
+                description: "[Placeholder text for expertise description]"
+              },
+              {
+                title: "Expertise 3",
+                description: "[Placeholder text for expertise description]"
+              }
+            ].map((item, index) => (
               <motion.div
-                key={item}
+                key={index}
                 className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
@@ -197,13 +210,13 @@ export default function Home() {
                 <div className="relative h-48 mb-4">
                   <Image
                     src="/missingTexture.jpg"
-                    alt={`Expertise ${item}`}
+                    alt={`${item.title}`}
                     fill
                     className="object-cover rounded-lg"
                   />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Obstetrics {item}</h3>
-                <p>[Thorough experience and expertise in both in and outpatient care]</p>
+                <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
+                <p>{item.description}</p>
               </motion.div>
             ))}
           </div>
