@@ -217,22 +217,23 @@ export default function Home() {
         <div className="container">
           <h2 className="text-4xl font-bold mb-12 text-center">Contact</h2>
           <div className="max-w-2xl mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form 
+              action="https://formsubmit.co/lemitatu@mailgolem.com" 
+              method="POST"
+              className="space-y-6"
+            >
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                   Name
                 </label>
                 <input
-                  {...register('name')}
                   type="text"
+                  name="name"
                   id="name"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="Your name"
                 />
-                {errors.name && (
-                  <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-                )}
               </div>
 
               <div>
@@ -240,16 +241,13 @@ export default function Home() {
                   Email
                 </label>
                 <input
-                  {...register('email')}
                   type="email"
+                  name="email"
                   id="email"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="your.email@example.com"
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                )}
               </div>
 
               <div>
@@ -257,38 +255,22 @@ export default function Home() {
                   Message
                 </label>
                 <textarea
-                  {...register('message')}
+                  name="message"
                   id="message"
                   required
                   rows={4}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="Your message"
                 />
-                {errors.message && (
-                  <p className="mt-1 text-sm text-red-600">{errors.message.message}</p>
-                )}
               </div>
-
-              {submitStatus.type && (
-                <div
-                  className={`p-4 rounded-lg ${
-                    submitStatus.type === 'success'
-                      ? 'bg-green-50 text-green-800'
-                      : 'bg-red-50 text-red-800'
-                  }`}
-                >
-                  {submitStatus.message}
-                </div>
-              )}
 
               <motion.button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[var(--color-4)] text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-[var(--color-4)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[var(--color-4)] text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-[var(--color-4)]/90 transition-colors"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                Send Message
               </motion.button>
             </form>
           </div>
