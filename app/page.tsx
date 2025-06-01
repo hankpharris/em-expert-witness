@@ -50,48 +50,10 @@ export default function Home() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactFormSchema),
   });
-
-  const onSubmit = async (data: ContactFormData) => {
-    setIsSubmitting(true);
-    setSubmitStatus({ type: null, message: '' });
-
-    try {
-      const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('email', data.email);
-      formData.append('message', data.message);
-      formData.append('_subject', `New Contact Form Submission from ${data.name}`);
-      formData.append('_template', 'table');
-      formData.append('_captcha', 'false');
-
-      const response = await fetch('https://formsubmit.co/el/yozigu', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      setSubmitStatus({
-        type: 'success',
-        message: 'Thank you for your message. We will get back to you soon.',
-      });
-      reset();
-    } catch (error) {
-      setSubmitStatus({
-        type: 'error',
-        message: error instanceof Error ? error.message : 'Something went wrong',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <main ref={containerRef} className="relative">
@@ -216,7 +178,20 @@ export default function Home() {
         <div className="container">
           <h2 className="text-4xl font-bold mb-12 text-center">Contact</h2>
           <div className="max-w-2xl mx-auto">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form 
+              action="https://formsubmit.co/el/yozigu" 
+              method="POST"
+              className="space-y-6"
+            >
+              {/* Honeypot */}
+              <input type="text" name="_honey" style={{ display: 'none' }} />
+              
+              {/* Disable Captcha */}
+              <input type="hidden" name="_captcha" value="false" />
+              
+              {/* Specify template */}
+              <input type="hidden" name="_template" value="table" />
+
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                   Name
@@ -225,6 +200,8 @@ export default function Home() {
                   {...register('name')}
                   type="text"
                   id="name"
+                  name="name"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="Your name"
                 />
@@ -241,6 +218,8 @@ export default function Home() {
                   {...register('email')}
                   type="email"
                   id="email"
+                  name="email"
+                  required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="your.email@example.com"
                 />
@@ -256,6 +235,8 @@ export default function Home() {
                 <textarea
                   {...register('message')}
                   id="message"
+                  name="message"
+                  required
                   rows={4}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-4)] focus:border-transparent"
                   placeholder="Your message"
@@ -265,26 +246,13 @@ export default function Home() {
                 )}
               </div>
 
-              {submitStatus.type && (
-                <div
-                  className={`p-4 rounded-lg ${
-                    submitStatus.type === 'success'
-                      ? 'bg-green-50 text-green-800'
-                      : 'bg-red-50 text-red-800'
-                  }`}
-                >
-                  {submitStatus.message}
-                </div>
-              )}
-
               <motion.button
                 type="submit"
-                disabled={isSubmitting}
                 className="w-full bg-[var(--color-4)] text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-[var(--color-4)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                Send Message
               </motion.button>
             </form>
           </div>
