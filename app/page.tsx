@@ -113,7 +113,8 @@ export default function Home() {
                 <span className="block text-2xl mt-2">CNM</span>
               </h1>
               <p className="text-xl md:text-2xl mb-8">Expert Midwife Witness</p>
-              <p className="text-lg text-gray-700">[Filler] years of midwifery experience</p>
+              <p className="text-lg text-gray-700">23 years of midwifery experience</p>
+              <p className="text-lg text-gray-700">Providing competent and compassionate case review and testimony</p>
             </motion.div>
             <div className="relative h-[500px] w-full flex justify-center items-center">
               <motion.div 
@@ -201,8 +202,8 @@ export default function Home() {
                     className="object-cover rounded-lg"
                   />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Expertise {item}</h3>
-                <p>[Placeholder text for expertise description]</p>
+                <h3 className="text-2xl font-bold mb-4">Obstetrics {item}</h3>
+                <p>[Thorough experience and expertise in both in and outpatient care]</p>
               </motion.div>
             ))}
           </div>
