@@ -114,7 +114,9 @@ export default function Home() {
               </h1>
               <p className="text-xl md:text-2xl mb-8">Expert Midwife Witness</p>
               <p className="text-lg text-gray-700">23 years of midwifery experience</p>
-              <p className="text-lg text-gray-700">Providing competent and compassionate case review and testimony</p>
+              <br></br>
+              <p className="text-lg text-gray-700">Providing competent and compassionate</p>
+              <p className="text-lg text-gray-700">case review and testimony</p>
             </motion.div>
             <div className="relative h-[500px] w-full flex justify-center items-center">
               <motion.div 
