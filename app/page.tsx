@@ -151,7 +151,7 @@ export default function Home() {
       {/* About Section */}
       <motion.section 
         style={{ scale: aboutScale, opacity: aboutOpacity }}
-        className="section bg-white py-16"
+        className="section bg-var(--color-5) py-16"
       >
         <div className="container max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -229,7 +229,7 @@ export default function Home() {
         className="section bg-white"
       >
         <div className="container">
-          <h2 className="text-4xl font-bold mb-12 text-center">Contact</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center">Contact Me</h2>
           <div className="max-w-2xl mx-auto">
             <form 
               action="https://formsubmit.co/1770854260335361e2390ec182a0976b" 
