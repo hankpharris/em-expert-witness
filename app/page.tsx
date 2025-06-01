@@ -190,15 +190,15 @@ export default function Home() {
             {[
               {
                 title: "Obstetrics",
-                description: "Thorough experience and expertise in both in and outpatient care"
+                description: "Experienced in both inpatient and oupatient care"
               },
               {
-                title: "Expertise 2",
-                description: "[Placeholder text for expertise description]"
+                title: "Gynecology",
+                description: "Expert knowledge on routine and problem-based treatment"
               },
               {
-                title: "Expertise 3",
-                description: "[Placeholder text for expertise description]"
+                title: "Menopausal",
+                description: "Thurough knowledge and practice with menopausal and perimenopausal care"
               }
             ].map((item, index) => (
               <motion.div
