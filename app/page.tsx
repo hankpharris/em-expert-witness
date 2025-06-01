@@ -69,7 +69,7 @@ export default function Home() {
       formData.append('_template', 'table');
       formData.append('_captcha', 'false');
 
-      const response = await fetch(`https://formsubmit.co/${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`, {
+      const response = await fetch('https://formsubmit.co/el/yozigu', {
         method: 'POST',
         body: formData,
       });
