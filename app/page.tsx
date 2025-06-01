@@ -112,7 +112,7 @@ export default function Home() {
                 <span className="block">Erin Leigh Monberg</span>
                 <span className="block text-2xl mt-2">CNM</span>
               </h1>
-              <p className="text-xl md:text-2xl mb-8">Expert Midwife Witness</p>
+              <p className="text-xl md:text-2xl mb-8">Nurse Midwife Expert Witness</p>
               <p className="text-lg text-gray-700">23 years of midwifery experience</p>
               <br></br>
               <p className="text-lg text-gray-700">Providing competent and compassionate</p>
