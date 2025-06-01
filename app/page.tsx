@@ -218,7 +218,7 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-12 text-center">Contact</h2>
           <div className="max-w-2xl mx-auto">
             <form 
-              action="https://formsubmit.co/hopharris@wpi.edu" 
+              action="https://formsubmit.co/1770854260335361e2390ec182a0976b" 
               method="POST"
               className="space-y-6"
             >
