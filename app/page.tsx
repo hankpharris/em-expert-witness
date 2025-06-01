@@ -61,18 +61,21 @@ export default function Home() {
     setSubmitStatus({ type: null, message: '' });
 
     try {
-      const response = await fetch('/api/contact', {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('message', data.message);
+      formData.append('_subject', `New Contact Form Submission from ${data.name}`);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+
+      const response = await fetch(`https://formsubmit.co/${process.env.NEXT_PUBLIC_CONTACT_EMAIL}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
-        throw new Error(result.error || 'Something went wrong');
+        throw new Error('Failed to send message');
       }
 
       setSubmitStatus({
